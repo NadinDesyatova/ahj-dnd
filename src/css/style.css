@@ -1,0 +1,156 @@
+.header {
+  margin-bottom: 20px;
+}
+
+.card {
+  width: 900px;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: #ebfcf9;
+
+  font-family: Arial, sans-serif;
+}
+
+.task-column {
+  width: 290px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding-left: 7px;
+  padding-right: 8px;
+  background-color: #e3e3e8;
+  border-radius: 5px;
+}
+
+.task-group-title {
+  padding: 0;
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #625c5c;
+  font-size: 14px;
+}
+
+.task-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.add-task {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.add-task-span {
+  color: #625c5c;
+  font-size: 14px;
+}
+
+.task {
+  display: flex;
+  width: 263px;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  padding: 5px 5px 0;
+  background-color:#f9f9fa;
+  border: 2px solid #e3e3e8;
+  border-radius: 5px;
+  box-shadow: #c3c3c4;
+  
+  color: #494646;;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.task__text {
+  padding: 5px 5px 10px;
+}
+
+.task:hover {
+  background-color: #f1f1f7;
+}
+
+.task-remove {
+  display: none;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-self: start;
+  background-color: #bfbebe;
+  height: 18px;
+  width: 18px;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.task:hover .task-remove {
+  display: block;
+}
+
+.task.dragged {
+  position: absolute;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.transparent-element {
+  position: relative;
+  opacity: 0;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  margin-top: -15px;
+  font-size: 14px;
+}
+
+.input-task {
+  border: 2px solid #dadada;
+  border-radius: 5px;
+  padding: 2px 10px 10px;
+  margin-bottom: 10px;
+
+  min-height: 30px;
+  background-color: #ffffff;
+
+  color: #827b7b;;
+}
+
+.input-task:focus {
+  outline: none;
+  border-color: #f1f1f6;
+}
+
+.input-task__close {
+  vertical-align: middle;
+  color: #625c5c;
+  text-decoration: none;
+  font-size: 22px;
+}
+
+.add-btn {
+  color: #fff;
+  background-color: rgb(54, 212, 122);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  margin-right: 5px;
+  padding: 8px 22px;
+  text-align: center;
+  transition: 0.3s ease;
+  text-decoration: none;
+  user-select: none;
+  font-weight: 500;
+  box-shadow: none;
+  font-size: 15px;
+}
