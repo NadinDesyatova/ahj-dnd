@@ -37,7 +37,7 @@ export default class TasksWidget {
         const storedHTML = this._storageTasks.getHTML(name);
   
         if (storedHTML) {
-          c.innerHTML = storedHTML;
+          c.insertAdjacentHTML("beforeend", storedHTML);
         }
       });
 
@@ -90,16 +90,19 @@ export default class TasksWidget {
     if (e.target.classList.contains("add-task-span")) {
       e.preventDefault();
 
-      const currentColumn = e.target.closest(TaskField.taskColumnSelector);
+      const addTaskSpan = e.target;
 
-      const addTaskContainer = currentColumn.querySelector(TaskField.addTaskSelector);
+      const addTaskContainer = addTaskSpan.closest(TaskField.addTaskSelector);
 
       const form = new AddTaskForm(addTaskContainer);
+
+      addTaskSpan.remove();
+
       const formEl = form.bindToDOM();
     
       const addBtn = formEl.querySelector(AddTaskForm.btnSelector);
 
-      const closeFormIcon = currentColumn.querySelector(AddTaskForm.closeIconSelector);
+      const closeFormIcon = formEl.querySelector(AddTaskForm.closeIconSelector);
 
       addBtn.addEventListener("click", this.onClickAddTaskBtn);
 
@@ -134,15 +137,21 @@ export default class TasksWidget {
   onClickCloseFormIcon(e) {
     e.preventDefault();
 
-    const addTaskEl = e.target.closest(TaskField.addTaskSelector);
+    const closeFormIcon = e.target;
+
+    const addTaskEl = closeFormIcon.closest(TaskField.addTaskSelector);
     
     const addBtn = addTaskEl.querySelector(AddTaskForm.btnSelector);
 
+    const form = addTaskEl.querySelector(AddTaskForm.formSelector);
+
     addBtn.removeEventListener("click", this.onClickAddTaskBtn);
 
-    e.target.removeEventListener("click", this.onClickCloseFormIcon);
+    closeFormIcon.removeEventListener("click", this.onClickCloseFormIcon);
 
-    addTaskEl.innerHTML = TaskField.addTaskSpanMarkup;
+    form.remove();
+
+    addTaskEl.insertAdjacentHTML("beforeend", TaskField.addTaskSpanMarkup);
   }
 
   onClickRemoveTaskIcon(e) {

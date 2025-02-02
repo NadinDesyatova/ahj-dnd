@@ -1,4 +1,5 @@
 import TaskField from "./task-field";
+import AddTaskForm from "./add-task-form";
 
 
 export default class Task {
@@ -30,10 +31,14 @@ export default class Task {
   
   bindToDOM() {
     const container = this.parentEl.querySelector(TaskField.taskContainerSelector);
-    container.insertAdjacentHTML("beforeEnd", Task.markup);
+    container.insertAdjacentHTML("beforeend", Task.markup);
 
     const addTaskEl = this.parentEl.querySelector(TaskField.addTaskSelector);
-    addTaskEl.innerHTML = TaskField.addTaskSpanMarkup;
+
+    const addTaskForm = addTaskEl.querySelector(AddTaskForm.formSelector);
+    addTaskForm.remove();
+
+    addTaskEl.insertAdjacentHTML("beforeend", TaskField.addTaskSpanMarkup);
 
     const tasks = container.querySelectorAll(Task.taskSelector);
 

@@ -32,7 +32,7 @@ export default class AddTaskForm {
   }
 
   bindToDOM() {
-    this.parentEl.innerHTML = AddTaskForm.markup;
+    this.parentEl.insertAdjacentHTML("beforeend", AddTaskForm.markup);
 
     const form = this.parentEl.querySelector(AddTaskForm.formSelector);
 

@@ -53,7 +53,7 @@ export default class TaskField {
   }
   
   bindToDOM() {
-    this.parentEl.innerHTML = TaskField.markup;
+    this.parentEl.insertAdjacentHTML("beforeend", TaskField.markup);
   }
 }
   

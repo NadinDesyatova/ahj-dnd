@@ -7,14 +7,14 @@ export default class DragAndDropTasks {
   constructor(parentEl) {
     this.parentEl = parentEl;
     this.actualTask = undefined;
-    this.lastMouseOverColumn = undefined;
+    this.lastMouseMoveColumn = undefined;
     
     this.deactivateTask = this.deactivateTask.bind(this);
     this.createTransparentEl = this.createTransparentEl.bind(this);
     this.changeStorage = this.changeStorage.bind(this);
 
     this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
 
     this.removeListeners = this.removeListeners.bind(this);
@@ -22,7 +22,7 @@ export default class DragAndDropTasks {
 
   createTransparentEl(originElement) {
     const transparentEl = document.createElement("div");
-    transparentEl.innerHTML = originElement.innerHTML;
+    transparentEl.insertAdjacentHTML("beforeend", originElement.innerHTML);
     transparentEl.classList.add("task");
     transparentEl.classList.add("transparent-element");
 
@@ -36,7 +36,7 @@ export default class DragAndDropTasks {
 
     this.actualTask.classList.remove("dragged");
 
-    this.lastMouseOverColumn = undefined;
+    this.lastMouseMoveColumn = undefined;
 
     this.actualTask = undefined;
   }
@@ -68,10 +68,10 @@ export default class DragAndDropTasks {
 
   removeListeners() {
     document.documentElement.removeEventListener('mouseup', this.onMouseUp);
-    document.documentElement.removeEventListener('mouseover', this.onMouseOver);
+    document.documentElement.removeEventListener('mousemove', this.onMouseMove);
   }
     
-  onMouseOver(e) {
+  onMouseMove(e) {
     this.actualTask.style.top = `${e.clientY - this.correctionElemY}px`;
     this.actualTask.style.left = `${e.clientX - this.correctionElemX}px`;
 
@@ -87,23 +87,17 @@ export default class DragAndDropTasks {
 
     if (this.hoverTask) {
       (this.hoverTask.offsetHeight / 2) <= (e.y - this.hoverTask.offsetTop)
-        ? taskContainer.insertBefore(
-          this.transparentEl,
-          this.hoverTask.nextSibling
-        )
-        : taskContainer.insertBefore(
-          this.transparentEl,
-          this.hoverTask
-        );
+        ? this.hoverTask.after(this.transparentEl)
+        : this.hoverTask.before(this.transparentEl);
       this.elemForMouseUp = this.hoverTask;
       return;
     }
 
-    if (this.lastMouseOverColumn !== column) {
+    if (this.lastMouseMoveColumn !== column) {
       this.elemForMouseUp = column;
-      taskContainer.appendChild(this.transparentEl);
+      taskContainer.append(this.transparentEl);
   
-      this.lastMouseOverColumn = column;
+      this.lastMouseMoveColumn = column;
     }
   }
     
@@ -124,9 +118,9 @@ export default class DragAndDropTasks {
 
     mouseUpTask
       ? (mouseUpTask.offsetHeight / 2) <= (e.y - mouseUpTask.offsetTop) 
-        ? container.insertBefore(this.actualTask, mouseUpTask.nextSibling)
-        : container.insertBefore(this.actualTask, mouseUpTask)
-      : container.appendChild(this.actualTask);
+        ? mouseUpTask.after(this.actualTask)
+        : mouseUpTask.before(this.actualTask)
+      : container.append(this.actualTask);
   
     this.deactivateTask();
 
@@ -142,8 +136,10 @@ export default class DragAndDropTasks {
       this.actualTask = e.target.closest(Task.taskSelector);
   
       this.initialColumn = this.actualTask.closest(TaskField.taskColumnSelector);
+
+      const container = this.initialColumn.querySelector(TaskField.taskContainerSelector);
   
-      this.initialHTML = this.initialColumn.querySelector(TaskField.taskContainerSelector).innerHTML;
+      this.initialHTML = container.innerHTML;
 
       document.body.style.cursor = "grabbing";
   
@@ -162,11 +158,11 @@ export default class DragAndDropTasks {
       this.elemForMouseUp =
           sibling && sibling.classList.contains("task")
             ? sibling
-            : this.actualTask.closest(TaskField.taskContainerSelector);
+            : container;
   
       this.actualTask.classList.add("dragged");
         
-      document.documentElement.addEventListener("mouseover", this.onMouseOver);
+      document.documentElement.addEventListener("mousemove", this.onMouseMove);
       document.documentElement.addEventListener("mouseup", this.onMouseUp);
     }
   }
