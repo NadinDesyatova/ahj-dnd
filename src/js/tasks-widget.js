@@ -115,11 +115,13 @@ export default class TasksWidget {
 
     const addBtn = e.target;
 
-    const currentColumn = addBtn.closest(TaskField.taskColumnSelector);
+    const form = addBtn.closest(AddTaskForm.formSelector);
 
-    const closeFormIcon = currentColumn.querySelector(AddTaskForm.closeIconSelector);
+    const currentColumn = form.closest(TaskField.taskColumnSelector);
+
+    const closeFormIcon = form.querySelector(AddTaskForm.closeIconSelector);
     
-    const input = currentColumn.querySelector(AddTaskForm.inputSelector);
+    const input = form.querySelector(AddTaskForm.inputSelector);
 
     const value = input.value.trim();
 
@@ -132,6 +134,12 @@ export default class TasksWidget {
     closeFormIcon.removeEventListener("click", this.onClickCloseFormIcon);
 
     this.addTask(currentColumn, value);
+
+    const addTaskContainer = form.closest(TaskField.addTaskSelector);
+
+    form.remove();
+    
+    addTaskContainer.insertAdjacentHTML("beforeend", TaskField.addTaskSpanMarkup);
   }
 
   onClickCloseFormIcon(e) {
