@@ -13,21 +13,21 @@ export default class TaskField {
           <h3 class="task-group-title">TODO</h3>
           <div class="task-container"></div>
           <div class="add-task">
-            <span class="add-task-span">+ Add Card</span>
+            <span class="add-task_content add-task-span">+ Add Card</span>
           </div>
         </div>
         <div class="task-column" name="${COLUMN_NAMES[1]}">
           <h3 class="task-group-title">IN PROGRESS</h3>
           <div class="task-container"></div>
           <div class="add-task">
-            <span class="add-task-span">+ Add Card</span>
+            <span class="add-task_content add-task-span">+ Add Card</span>
           </div>
         </div>
         <div class="task-column" name="${COLUMN_NAMES[2]}">
           <h3 class="task-group-title">DONE</h3>
           <div class="task-container"></div>
           <div class="add-task">
-            <span class="add-task-span">+ Add Card</span>
+            <span class="add-task_content add-task-span">+ Add Card</span>
           </div>
         </div>
       </div>
@@ -46,10 +46,8 @@ export default class TaskField {
     return ".add-task";
   }
 
-  static get addTaskSpanMarkup() {
-    return `
-      <span class="add-task-span">+ Add Card</span>
-    `;
+  static get addTaskContentSelector() {
+    return ".add-task_content";
   }
   
   bindToDOM() {

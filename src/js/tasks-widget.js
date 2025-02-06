@@ -15,6 +15,8 @@ export default class TasksWidget {
     this.removeTask = this.removeTask.bind(this);
     this.moveTask = this.moveTask.bind(this);
 
+    this.addTaskContainerToggle = this.addTaskContainerToggle.bind(this);
+
     this.onClickAddTaskSpan = this.onClickAddTaskSpan.bind(this);
     this.onClickAddTaskBtn = this.onClickAddTaskBtn.bind(this);
     this.onClickCloseFormIcon = this.onClickCloseFormIcon.bind(this);
@@ -65,6 +67,11 @@ export default class TasksWidget {
     this._storageTasks.save(column.getAttribute("name"), columnContainer);
   }
 
+  addTaskContainerToggle(container) {
+    const addTaskContentElements = container.querySelectorAll(TaskField.addTaskContentSelector);
+    addTaskContentElements.forEach(elem => elem.classList.toggle("add-task_content__overlapped"));
+  }
+
   removeTask(id) {
     const task = this._tasks.find((task) => task.id === Number(id));
 
@@ -94,15 +101,23 @@ export default class TasksWidget {
 
       const addTaskContainer = addTaskSpan.closest(TaskField.addTaskSelector);
 
-      const form = new AddTaskForm(addTaskContainer);
+      const formEl = addTaskContainer.querySelector(AddTaskForm.formSelector);
+      
+      if (formEl) {
+        this.addTaskContainerToggle(addTaskContainer);
 
-      addTaskSpan.remove();
+        return;
+      }
 
-      const formEl = form.bindToDOM();
-    
-      const addBtn = formEl.querySelector(AddTaskForm.btnSelector);
+      const newForm = new AddTaskForm(addTaskContainer);
 
-      const closeFormIcon = formEl.querySelector(AddTaskForm.closeIconSelector);
+      const newFormEl = newForm.bindToDOM();
+
+      this.addTaskContainerToggle(addTaskContainer);
+
+      const addBtn = newFormEl.querySelector(AddTaskForm.btnSelector);
+
+      const closeFormIcon = newFormEl.querySelector(AddTaskForm.closeIconSelector);
 
       addBtn.addEventListener("click", this.onClickAddTaskBtn);
 
@@ -118,8 +133,6 @@ export default class TasksWidget {
     const form = addBtn.closest(AddTaskForm.formSelector);
 
     const currentColumn = form.closest(TaskField.taskColumnSelector);
-
-    const closeFormIcon = form.querySelector(AddTaskForm.closeIconSelector);
     
     const input = form.querySelector(AddTaskForm.inputSelector);
 
@@ -128,18 +141,12 @@ export default class TasksWidget {
     if (!value) {
       return;
     }
-    
-    addBtn.removeEventListener("click", this.onClickAddTaskBtn);
 
-    closeFormIcon.removeEventListener("click", this.onClickCloseFormIcon);
+    this.addTaskContainerToggle(currentColumn);
 
     this.addTask(currentColumn, value);
 
-    const addTaskContainer = form.closest(TaskField.addTaskSelector);
-
-    form.remove();
-    
-    addTaskContainer.insertAdjacentHTML("beforeend", TaskField.addTaskSpanMarkup);
+    form.reset();
   }
 
   onClickCloseFormIcon(e) {
@@ -147,19 +154,11 @@ export default class TasksWidget {
 
     const closeFormIcon = e.target;
 
-    const addTaskEl = closeFormIcon.closest(TaskField.addTaskSelector);
-    
-    const addBtn = addTaskEl.querySelector(AddTaskForm.btnSelector);
+    const container = closeFormIcon.closest(TaskField.addTaskSelector);
 
-    const form = addTaskEl.querySelector(AddTaskForm.formSelector);
+    this.addTaskContainerToggle(container);
 
-    addBtn.removeEventListener("click", this.onClickAddTaskBtn);
-
-    closeFormIcon.removeEventListener("click", this.onClickCloseFormIcon);
-
-    form.remove();
-
-    addTaskEl.insertAdjacentHTML("beforeend", TaskField.addTaskSpanMarkup);
+    closeFormIcon.closest(AddTaskForm.formSelector).reset();
   }
 
   onClickRemoveTaskIcon(e) {

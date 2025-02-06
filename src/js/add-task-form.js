@@ -5,7 +5,7 @@ export default class AddTaskForm {
 
   static get markup() {
     return `
-      <form class="control">
+      <form class="add-task_content add-task_control add-task_content__overlapped">
         <input type="text" name="task" class="input-task" placeholder="Enter a title for this card...">
         <div>
           <button class="add-btn">Add Card</button>
@@ -16,7 +16,7 @@ export default class AddTaskForm {
   }
 
   static get formSelector() {
-    return ".control";
+    return ".add-task_control";
   }
 
   static get inputSelector() {
