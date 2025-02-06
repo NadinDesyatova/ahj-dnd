@@ -1,5 +1,5 @@
 import Task from "./task";
-import { COLUMN_NAMES } from "./task-field";
+import taskFieldsNames from "../task-fields-names.json";
 
 
 export default class StorageTask {
@@ -36,7 +36,9 @@ export default class StorageTask {
 
   checkStorage() {
     const storageKeys = Object.keys(localStorage);
+
+    const columnNames = taskFieldsNames.map(item => item.name);
     
-    return storageKeys.some((key) => COLUMN_NAMES.includes(key));
+    return storageKeys.some((key) => columnNames.includes(key));
   }
 }

@@ -3,6 +3,8 @@ import TaskField from "./task-field";
 import AddTaskForm from "./add-task-form";
 import StorageTask from "./storage-task";
 import DragAndDropTasks from "./drag-and-drop-tasks";
+import taskFieldsNames from "../task-fields-names.json";
+
 
 
 export default class TasksWidget {
@@ -27,10 +29,17 @@ export default class TasksWidget {
   }
 
   bindToDOM() {
-    const field = new TaskField(this.parentEl);
-    field.bindToDOM();
+    this.parentEl.insertAdjacentHTML("beforeend", "<div class='card'></div>");
+    const card = this.parentEl.querySelector(".card");
 
-    this.taskContainers = this.parentEl.querySelectorAll(TaskField.taskContainerSelector);
+    taskFieldsNames.forEach(
+      (item) => {
+        const field = new TaskField(card, item["name"], item["title-text"]);
+        field.bindToDOM();
+      }
+    );
+
+    this.taskContainers = card.querySelectorAll(TaskField.taskContainerSelector);
 
     if (this._storageTasks.checkStorage()) {
       this.taskContainers.forEach((c) => {
@@ -43,7 +52,7 @@ export default class TasksWidget {
         }
       });
 
-      this._storageTasks.addToTasksArray(this.parentEl);
+      this._storageTasks.addToTasksArray(card);
 
       this._tasks = this._storageTasks.tasks;
     }

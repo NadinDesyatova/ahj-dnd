@@ -1,34 +1,17 @@
-export const COLUMN_NAMES = ["todo", "progress", "done"];
-
-
 export default class TaskField {
-  constructor(parentEl) {
+  constructor(parentEl, name, titleText) {
     this.parentEl = parentEl;
+    this.name = name;
+    this.titleText = titleText;
   }
   
   static get markup() {
     return `
-      <div class="card">
-        <div class="task-column" name="${COLUMN_NAMES[0]}">
-          <h3 class="task-group-title">TODO</h3>
-          <div class="task-container"></div>
-          <div class="add-task">
-            <span class="add-task_content add-task-span">+ Add Card</span>
-          </div>
-        </div>
-        <div class="task-column" name="${COLUMN_NAMES[1]}">
-          <h3 class="task-group-title">IN PROGRESS</h3>
-          <div class="task-container"></div>
-          <div class="add-task">
-            <span class="add-task_content add-task-span">+ Add Card</span>
-          </div>
-        </div>
-        <div class="task-column" name="${COLUMN_NAMES[2]}">
-          <h3 class="task-group-title">DONE</h3>
-          <div class="task-container"></div>
-          <div class="add-task">
-            <span class="add-task_content add-task-span">+ Add Card</span>
-          </div>
+      <div class="task-column">
+        <h3 class="task-group-title"></h3>
+        <div class="task-container"></div>
+        <div class="add-task">
+          <span class="add-task_content add-task-span">+ Add Card</span>
         </div>
       </div>
     `;
@@ -42,6 +25,10 @@ export default class TaskField {
     return ".task-container";
   }
 
+  static get taskGroupTitleSelector() {
+    return ".task-group-title";
+  }
+
   static get addTaskSelector() {
     return ".add-task";
   }
@@ -52,6 +39,13 @@ export default class TaskField {
   
   bindToDOM() {
     this.parentEl.insertAdjacentHTML("beforeend", TaskField.markup);
+
+    const columns = this.parentEl.querySelectorAll(TaskField.taskColumnSelector);
+
+    const currentColumn = columns[columns.length - 1];
+
+    currentColumn.setAttribute("name", this.name);
+    currentColumn.querySelector(TaskField.taskGroupTitleSelector).textContent = this.titleText;
   }
 }
   

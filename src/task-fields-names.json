@@ -1,0 +1,14 @@
+[
+  {
+    "name": "todo",
+    "title-text": "TODO"
+  },
+  {
+    "name": "progress",
+    "title-text": "IN PROGRESS"
+  },
+  {
+    "name": "done",
+    "title-text": "DONE"
+  }
+]
