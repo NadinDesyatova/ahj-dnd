@@ -153,13 +153,16 @@ export default class DragAndDropTasks {
   
       this.transparentEl = this.createTransparentEl(this.actualTask);
         
-      const sibling = this.actualTask.nextSiblingElement;
+      const sibling = this.actualTask.nextElementSibling;
   
-      this.elemForMouseUp =
-          sibling && sibling.classList.contains("task")
-            ? sibling
-            : container;
-  
+      if (sibling && sibling.classList.contains("task")) {
+        sibling.before(this.transparentEl);
+        this.elemForMouseUp = sibling;
+      } else {
+        container.append(this.transparentEl);
+        this.elemForMouseUp = container;
+      }
+      
       this.actualTask.classList.add("dragged");
         
       document.documentElement.addEventListener("mousemove", this.onMouseMove);
